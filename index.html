@@ -39,8 +39,15 @@ header {
   padding: 16px;
 }
 
-h1 { margin: 0; font-size: 22px; }
-main { padding: 20px; padding-bottom: 110px; }
+h1 {
+  margin: 0;
+  font-size: 22px;
+}
+
+main {
+  padding: 20px;
+  padding-bottom: 110px;
+}
 
 .card {
   background: var(--card);
@@ -63,7 +70,12 @@ main { padding: 20px; padding-bottom: 110px; }
   justify-content: center;
 }
 
-.actions { display: flex; justify-content: space-around; margin-top: 20px; font-size: 28px; }
+.actions {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+  font-size: 28px;
+}
 
 button {
   border: none;
@@ -73,8 +85,13 @@ button {
   border-radius: 8px;
 }
 
-button:active { background: rgba(0,0,0,0.1); }
-.hidden { display: none; }
+button:active {
+  background: rgba(0,0,0,0.1);
+}
+
+.hidden {
+  display: none;
+}
 
 /* DOCK LIQUID GLASS */
 nav {
@@ -142,13 +159,20 @@ nav button::after {
 }
 
 nav button:hover,
-nav button:active { transform: translateY(-12px) scale(1.25); }
+nav button:active {
+  transform: translateY(-12px) scale(1.25);
+}
 
 nav button:hover::before,
-nav button:active::before { transform: scale(2); opacity: 1; }
+nav button:active::before {
+  transform: scale(2);
+  opacity: 1;
+}
 
 nav button:hover::after,
-nav button:active::after { opacity: 0.7; }
+nav button:active::after {
+  opacity: 0.7;
+}
 
 /* LANDING PAGE */
 .modal {
@@ -253,9 +277,9 @@ nav button:active::after { opacity: 0.7; }
 <!-- LANDING PAGE -->
 <div id="landing" class="modal">
   <div class="modal-content">
-    <h2>Estoico Diario v2.4</h2>
+    <h2>Estoico Diario v2.5</h2>
     <p>
-      Frases diarias, reflexión, meditación (10 min fija), café, ánimo, libros y exportación.<br><br>
+      Frases diarias, reflexión, meditación de 10 minutos, café, ánimo, libros y exportación.<br><br>
       Vive con disciplina, calma y virtud.<br><br>
       Desarrollada por <b>Kingmerino</b>
     </p>
@@ -310,17 +334,19 @@ nav button:active::after { opacity: 0.7; }
   <ul id="historialCafe"></ul>
 </section>
 
-<!-- MEDITACIÓN -->
+<!-- MEDITACIÓN - 10 MINUTOS CUENTA ATRÁS AL PULSAR INICIAR -->
 <section id="meditacionView" class="card hidden">
   <h3>Meditación</h3>
   <div id="timerDisplay">10:00</div>
+  
   <div class="timer-controls">
-    <button id="playPauseBtn" onclick="toggleTimer()">▶️ Iniciar</button>
+    <button id="playPauseBtn">▶️ Iniciar</button>
     <button onclick="reiniciarTimer()">🔄 Reiniciar</button>
   </div>
+
   <p style="text-align:center; font-style:italic; margin-top:40px;">
-    Meditación guiada de 10 minutos.<br>
-    Respira profundamente y enfócate en el presente.
+    Sesión de 10 minutos.<br>
+    Cuando estés listo, pulsa Iniciar.
   </p>
 </section>
 
@@ -377,40 +403,399 @@ nav button:active::after { opacity: 0.7; }
 </nav>
 
 <script>
-// --- LANDING ---
-function cerrarLanding(){ document.getElementById("landing").style.display="none"; }
+// CERRAR LANDING
+function cerrarLanding() {
+  document.getElementById("landing").style.display = "none";
+}
 
-// --- FRASES ---
+// FRASES ESTOICAS
 const frases = {
-  lunes:["El obstáculo es el camino.","Empieza donde estás. Usa lo que tienes. Haz lo que puedas.","La felicidad de tu vida depende de la calidad de tus pensamientos.","No tienes que controlar tus pensamientos. Solo dejar de dejar que te controlen.","Controla lo que depende de ti, acepta lo que no."],
-  martes:["La calma es poder.","No expliques tu filosofía. Incorpórala.","Pierdes el día si no aprendes algo nuevo.","Elige no ser dañado y no te sentirás dañado.","Muy poco es necesario para hacer una vida feliz."],
-  miércoles:["Haz lo correcto, aunque nadie mire.","La riqueza consiste en tener pocas necesidades.","No es lo que te ocurre, sino cómo reaccionas lo que importa.","Primero di a ti mismo lo que serás; y luego haz lo que tienes que hacer.","El hombre sabio se alegra de lo que tiene."],
-  jueves:["Acepta lo que es. Deja ir lo que fue. Ten fe en lo que será.","Puedes cometer errores, pero no eres un error.","Todo lo que escuchamos es una opinión, no un hecho.","La vida es muy corta para soportarla con mala actitud.","Tienes poder sobre tu mente, no sobre los eventos externos."],
-  viernes:["La disciplina es libertad.","No desperdicies tiempo discutiendo cómo debería ser un buen hombre. Sé uno.","Si no es necesario, no lo hagas. Si es necesario, no lo dudes.","La mejor venganza es no ser como tu enemigo.","Comienza a vivir de una vez."],
-  sábado:["Menos es más.","La tranquilidad se alcanza actuando con virtud.","No necesitas más tiempo. Necesitas menos distracciones.","El arte de vivir es más como la lucha que como el baile.","Descansa, pero sin culpa."],
-  domingo:["Descansa sin culpa.","Reflexiona sobre lo que has hecho bien y lo que puedes mejorar.","El hombre sabio se alegra de lo que tiene.","La mejor venganza es una vida bien vivida.","Agradece lo que tienes. Vivirás más feliz."]
+  lunes: [
+    "El obstáculo es el camino.",
+    "Empieza donde estás. Usa lo que tienes. Haz lo que puedas.",
+    "La felicidad de tu vida depende de la calidad de tus pensamientos.",
+    "No tienes que controlar tus pensamientos. Solo dejar de dejar que te controlen.",
+    "Controla lo que depende de ti, acepta lo que no."
+  ],
+  martes: [
+    "La calma es poder.",
+    "No expliques tu filosofía. Incorpórala.",
+    "Pierdes el día si no aprendes algo nuevo.",
+    "Elige no ser dañado y no te sentirás dañado.",
+    "Muy poco es necesario para hacer una vida feliz."
+  ],
+  miércoles: [
+    "Haz lo correcto, aunque nadie mire.",
+    "La riqueza consiste en tener pocas necesidades.",
+    "No es lo que te ocurre, sino cómo reaccionas lo que importa.",
+    "Primero di a ti mismo lo que serás; y luego haz lo que tienes que hacer.",
+    "El hombre sabio se alegra de lo que tiene."
+  ],
+  jueves: [
+    "Acepta lo que es. Deja ir lo que fue. Ten fe en lo que será.",
+    "Puedes cometer errores, pero no eres un error.",
+    "Todo lo que escuchamos es una opinión, no un hecho.",
+    "La vida es muy corta para soportarla con mala actitud.",
+    "Tienes poder sobre tu mente, no sobre los eventos externos."
+  ],
+  viernes: [
+    "La disciplina es libertad.",
+    "No desperdicies tiempo discutiendo cómo debería ser un buen hombre. Sé uno.",
+    "Si no es necesario, no lo hagas. Si es necesario, no lo dudes.",
+    "La mejor venganza es no ser como tu enemigo.",
+    "Comienza a vivir de una vez."
+  ],
+  sábado: [
+    "Menos es más.",
+    "La tranquilidad se alcanza actuando con virtud.",
+    "No necesitas más tiempo. Necesitas menos distracciones.",
+    "El arte de vivir es más como la lucha que como el baile.",
+    "Descansa, pero sin culpa."
+  ],
+  domingo: [
+    "Descansa sin culpa.",
+    "Reflexiona sobre lo que has hecho bien y lo que puedes mejorar.",
+    "El hombre sabio se alegra de lo que tiene.",
+    "La mejor venganza es una vida bien vivida.",
+    "Agradece lo que tienes. Vivirás más feliz."
+  ]
 };
 
 const hoy = new Date();
 const fechaStr = hoy.toDateString();
-const diaSemana = hoy.toLocaleDateString("es-ES",{weekday:"long"});
-const keyFraseOriginal="fraseOriginal_"+fechaStr;
-let frase=localStorage.getItem("frase_"+fechaStr)||localStorage.getItem(keyFraseOriginal);
-if(!frase){ const opciones=frases[diaSemana]; frase=opciones[Math.floor(Math.random()*opciones.length)]; localStorage.setItem(keyFraseOriginal,frase); localStorage.setItem("frase_"+fechaStr,frase);}
-document.getElementById("frase").innerText=frase;
+const diaSemana = hoy.toLocaleDateString("es-ES", { weekday: "long" });
+const keyFrase = "frase_" + fechaStr;
+const keyFraseOriginal = "fraseOriginal_" + fechaStr;
 
-function cambiarFrase(){ const opciones=frases[diaSemana]; let nueva; do{ nueva=opciones[Math.floor(Math.random()*opciones.length)]; }while(nueva===frase); frase=nueva; document.getElementById("frase").innerText=frase; }
+let frase = localStorage.getItem(keyFrase) || localStorage.getItem(keyFraseOriginal);
+if (!frase) {
+  const opciones = frases[diaSemana];
+  frase = opciones[Math.floor(Math.random() * opciones.length)];
+  localStorage.setItem(keyFraseOriginal, frase);
+  localStorage.setItem(keyFrase, frase);
+}
+document.getElementById("frase").innerText = frase;
 
-// --- EJERCICIO ---
-const ejercicios=["Dichotomía del control: Escribe 3 cosas que hoy dependen de ti y 3 que no.","Visualización negativa: Imagina que pierdes algo valioso hoy. ¿Cómo reaccionarías con virtud?","Gratitud: Escribe 3 cosas por las que estás agradecido hoy.","Memento mori: Si este fuera tu último día, ¿qué harías diferente?"];
-let ejercicioActual=localStorage.getItem("ejercicio_"+fechaStr);
-if(!ejercicioActual){ ejercicioActual=ejercicios[Math.floor(Math.random()*ejercicios.length)]; localStorage.setItem("ejercicio_"+fechaStr,ejercicioActual);}
-document.getElementById("ejercicioTexto").innerText=ejercicioActual;
-const respuestaEjercicioGuardada=localStorage.getItem("ejercicioRespuesta_"+fechaStr);
-if(respuestaEjercicioGuardada) document.getElementById("ejercicioRespuesta").value=respuestaEjercicioGuardada;
-function guardarEjercicio(){ const resp=document.getElementById("ejercicioRespuesta").value.trim(); if(resp){localStorage.setItem("ejercicioRespuesta_"+fechaStr,resp); alert("Ejercicio guardado");} }
+function cambiarFrase() {
+  const opciones = frases[diaSemana];
+  let nueva;
+  do {
+    nueva = opciones[Math.floor(Math.random() * opciones.length)];
+  } while (nueva === frase);
+  frase = nueva;
+  document.getElementById("frase").innerText = frase;
+}
 
-// --- FAVORITOS ---
-function getFavoritos(){ return JSON.parse(localStorage.getItem("favoritos")||"[]"); }
-function guardarFavorita(){ let favs=getFavoritos(); if(favs.length>=7){alert("Máximo 7 frases favoritas");return;} if(!favs.includes(frase)){favs.push(frase); localStorage.setItem("favoritos",JSON.stringify(favs)); alert("¡Guardada en favoritos ❤️");} else{alert("Ya está en favoritos");}}
-function mostrarFavoritos(){ ocultarTodo(); document.getElementById("favoritosView").classList.remove("hidden"); const lista=document.getElementById("listaFavoritos"); lista.innerHTML=""; getFavoritos().forEach((f,i)=>{ const li=document.createElement("li"); li.style.marginBottom="12px"; li.innerHTML=`${f} <button onclick="borrarFav(${i})">❌</button
+// EJERCICIO ESTOICO
+const ejercicios = [
+  "Dichotomía del control: Escribe 3 cosas que hoy dependen de ti y 3 que no.",
+  "Visualización negativa: Imagina que pierdes algo valioso hoy. ¿Cómo reaccionarías con virtud?",
+  "Gratitud: Escribe 3 cosas por las que estás agradecido hoy.",
+  "Memento mori: Si este fuera tu último día, ¿qué harías diferente?"
+];
+
+let ejercicioActual = localStorage.getItem("ejercicio_" + fechaStr);
+if (!ejercicioActual) {
+  ejercicioActual = ejercicios[Math.floor(Math.random() * ejercicios.length)];
+  localStorage.setItem("ejercicio_" + fechaStr, ejercicioActual);
+}
+document.getElementById("ejercicioTexto").innerText = ejercicioActual;
+
+const respuestaEjercicioGuardada = localStorage.getItem("ejercicioRespuesta_" + fechaStr);
+if (respuestaEjercicioGuardada) {
+  document.getElementById("ejercicioRespuesta").value = respuestaEjercicioGuardada;
+}
+
+function guardarEjercicio() {
+  const respuesta = document.getElementById("ejercicioRespuesta").value.trim();
+  if (respuesta) {
+    localStorage.setItem("ejercicioRespuesta_" + fechaStr, respuesta);
+    alert("Ejercicio guardado");
+  }
+}
+
+// FAVORITOS
+function getFavoritos() {
+  return JSON.parse(localStorage.getItem("favoritos") || "[]");
+}
+
+function guardarFavorita() {
+  let favs = getFavoritos();
+  if (favs.length >= 7) {
+    alert("Máximo 7 frases favoritas");
+    return;
+  }
+  if (!favs.includes(frase)) {
+    favs.push(frase);
+    localStorage.setItem("favoritos", JSON.stringify(favs));
+    alert("¡Guardada en favoritos ❤️");
+  } else {
+    alert("Ya está en favoritos");
+  }
+}
+
+function mostrarFavoritos() {
+  ocultarTodo();
+  document.getElementById("favoritosView").classList.remove("hidden");
+  const lista = document.getElementById("listaFavoritos");
+  lista.innerHTML = "";
+  getFavoritos().forEach((f, i) => {
+    const li = document.createElement("li");
+    li.style.marginBottom = "12px";
+    li.innerHTML = `${f} <button onclick="borrarFav(${i})">❌</button>`;
+    lista.appendChild(li);
+  });
+}
+
+function borrarFav(i) {
+  let favs = getFavoritos();
+  favs.splice(i, 1);
+  localStorage.setItem("favoritos", JSON.stringify(favs));
+  mostrarFavoritos();
+}
+
+function enviarFavoritos() {
+  const texto = getFavoritos().join("\n\n");
+  window.location.href = `mailto:?subject=Mis frases estoicas favoritas&body=${encodeURIComponent(texto)}`;
+}
+
+// CAFÉ
+const cafeKey = "cafe_" + fechaStr;
+
+function registrarCafe() {
+  let cafes = JSON.parse(localStorage.getItem(cafeKey) || "[]");
+  cafes.push(document.getElementById("cafeSelect").value);
+  localStorage.setItem(cafeKey, JSON.stringify(cafes));
+  if (cafes.length > 4) alert("¡Límite saludable superado! ☕");
+  actualizarCafe();
+}
+
+function actualizarCafe() {
+  let cafes = JSON.parse(localStorage.getItem(cafeKey) || "[]");
+  document.getElementById("contadorCafe").innerText = `Cafés hoy: ${cafes.length}`;
+}
+
+function mostrarCafe() {
+  ocultarTodo();
+  document.getElementById("cafeView").classList.remove("hidden");
+  actualizarCafe();
+  cargarHistorialCafe();
+}
+
+function cargarHistorialCafe() {
+  const ul = document.getElementById("historialCafe");
+  ul.innerHTML = "";
+  for (let i = 0; i < 7; i++) {
+    let d = new Date();
+    d.setDate(d.getDate() - i);
+    let k = "cafe_" + d.toDateString();
+    let count = JSON.parse(localStorage.getItem(k) || "[]").length;
+    const li = document.createElement("li");
+    li.innerText = `${d.toLocaleDateString("es-ES")}: ${count} cafés`;
+    ul.appendChild(li);
+  }
+}
+
+// MEDITACIÓN - CUENTA ATRÁS DE 10 MINUTOS AL PULSAR INICIAR
+let timerInterval = null;
+const TIEMPO_TOTAL = 600; // 10 minutos en segundos
+let tiempoRestante = TIEMPO_TOTAL;
+
+function actualizarDisplay() {
+  const minutos = Math.floor(tiempoRestante / 60).toString().padStart(2, '0');
+  const segundos = (tiempoRestante % 60).toString().padStart(2, '0');
+  document.getElementById("timerDisplay").innerText = `${minutos}:${segundos}`;
+}
+
+function toggleTimer() {
+  const btn = document.getElementById("playPauseBtn");
+  if (timerInterval) {
+    // Pausar
+    clearInterval(timerInterval);
+    timerInterval = null;
+    btn.innerText = "▶️ Iniciar";
+  } else {
+    // Iniciar o reanudar
+    timerInterval = setInterval(() => {
+      tiempoRestante--;
+      actualizarDisplay();
+      if (tiempoRestante <= 0) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        document.getElementById("timerDisplay").innerText = "¡Fin!";
+        const audio = new Audio("data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAAA");
+        audio.play();
+        setTimeout(() => {
+          if (confirm("¡Meditación completada! ¿Volver a inicio?")) mostrarPrincipal();
+        }, 1000);
+        btn.innerText = "▶️ Iniciar";
+      }
+    }, 1000);
+    btn.innerText = "⏸ Pausar";
+  }
+}
+
+function reiniciarTimer() {
+  clearInterval(timerInterval);
+  timerInterval = null;
+  tiempoRestante = TIEMPO_TOTAL;
+  document.getElementById("playPauseBtn").innerText = "▶️ Iniciar";
+  actualizarDisplay();
+}
+
+function mostrarMeditacion() {
+  ocultarTodo();
+  document.getElementById("meditacionView").classList.remove("hidden");
+  reiniciarTimer(); // Muestra 10:00 sin iniciar automáticamente
+}
+
+// REFLEXIÓN
+function mostrarReflexion() {
+  ocultarTodo();
+  document.getElementById("reflexionView").classList.remove("hidden");
+  document.getElementById("fraseReflexion").innerText = localStorage.getItem(keyFraseOriginal) || frase;
+  document.getElementById("reflexionText").value = localStorage.getItem("reflexion_" + fechaStr) || "";
+
+  const ul = document.getElementById("historialReflexion");
+  ul.innerHTML = "";
+  for (let i = 1; i <= 30; i++) {
+    let d = new Date();
+    d.setDate(d.getDate() - i);
+    let k = "reflexion_" + d.toDateString();
+    let texto = localStorage.getItem(k);
+    if (texto) {
+      const li = document.createElement("li");
+      li.innerHTML = `<strong>${d.toLocaleDateString("es-ES")}</strong><br>${texto.substring(0,100)}...`;
+      ul.appendChild(li);
+    }
+  }
+}
+
+function guardarReflexion() {
+  const texto = document.getElementById("reflexionText").value.trim();
+  if (texto) {
+    localStorage.setItem("reflexion_" + fechaStr, texto);
+    alert("Reflexión guardada");
+  }
+}
+
+// ÁNIMO
+function registrarAnimo(emoji) {
+  localStorage.setItem("animo_" + fechaStr, emoji);
+  alert("Ánimo registrado " + emoji);
+  mostrarHistoriaAnimo();
+}
+
+function mostrarAnimo() {
+  ocultarTodo();
+  document.getElementById("animoView").classList.remove("hidden");
+  mostrarHistoriaAnimo();
+}
+
+function mostrarHistoriaAnimo() {
+  const div = document.getElementById("moodHistory");
+  div.innerHTML = "";
+  for (let i = 6; i >= 0; i--) {
+    let d = new Date();
+    d.setDate(d.getDate() - i);
+    let emoji = localStorage.getItem("animo_" + d.toDateString()) || "➖";
+    div.innerHTML += emoji + " ";
+  }
+}
+
+// LIBRO
+const libros = [
+  { titulo: "Meditaciones", autor: "Marco Aurelio", descripcion: "Reflexiones personales del emperador romano sobre la vida, la muerte y la virtud estoica." },
+  { titulo: "Cartas a Lucilio", autor: "Séneca", descripcion: "Cartas filosóficas sobre amistad, miedo a la muerte y sabiduría práctica." },
+  { titulo: "Enquiridión", autor: "Epicteto", descripcion: "Manual conciso para distinguir lo que depende de nosotros y lo que no." },
+  { titulo: "Sobre la brevedad de la vida", autor: "Séneca", descripcion: "Ensayo sobre cómo no desperdiciar el tiempo que tenemos." },
+  { titulo: "Discursos", autor: "Epicteto", descripcion: "Lecciones profundas sobre libertad interior y ética." },
+  { titulo: "De la ira", autor: "Séneca", descripcion: "Guía práctica para controlar la ira y mantener la calma." }
+];
+
+function mostrarLibro() {
+  ocultarTodo();
+  document.getElementById("libroView").classList.remove("hidden");
+  const libro = libros[Math.floor(Math.random() * libros.length)];
+  document.getElementById("libroTitulo").innerText = libro.titulo;
+  document.getElementById("libroAutor").innerText = `Autor: ${libro.autor}`;
+  document.getElementById("libroDescripcion").innerText = libro.descripcion;
+  const query = encodeURIComponent(`${libro.titulo} ${libro.autor} libro`);
+  document.getElementById("libroLink").href = `https://www.google.com/search?q=${query}`;
+}
+
+// EXPORTAR
+function mostrarExport() {
+  ocultarTodo();
+  document.getElementById("exportView").classList.remove("hidden");
+}
+
+function exportarDatos() {
+  let texto = "=== ESTOICO DIARIO - TUS DATOS ===\n\n";
+  texto += "Favoritos:\n" + getFavoritos().join("\n") + "\n\n";
+  texto += "Reflexiones (últimos 30 días):\n";
+  for (let i = 1; i <= 30; i++) {
+    let d = new Date();
+    d.setDate(d.getDate() - i);
+    let r = localStorage.getItem("reflexion_" + d.toDateString());
+    if (r) texto += `${d.toLocaleDateString("es-ES")}: ${r}\n\n`;
+  }
+  texto += "Café (últimos 7 días):\n";
+  for (let i = 0; i < 7; i++) {
+    let d = new Date();
+    d.setDate(d.getDate() - i);
+    let count = JSON.parse(localStorage.getItem("cafe_" + d.toDateString()) || "[]").length;
+    texto += `${d.toLocaleDateString("es-ES")}: ${count} cafés\n`;
+  }
+  texto += "\nÁnimo (últimos 7 días):\n";
+  for (let i = 6; i >= 0; i--) {
+    let d = new Date();
+    d.setDate(d.getDate() - i);
+    let emoji = localStorage.getItem("animo_" + d.toDateString()) || "➖";
+    texto += `${d.toLocaleDateString("es-ES")}: ${emoji}\n`;
+  }
+
+  const blob = new Blob([texto], { type: "text/plain" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "estoico_diario_datos.txt";
+  a.click();
+}
+
+// NAVEGACIÓN
+function mostrarPrincipal() {
+  ocultarTodo();
+  document.getElementById("principalView").classList.remove("hidden");
+}
+
+function ocultarTodo() {
+  const views = ["principalView", "favoritosView", "cafeView", "meditacionView", "reflexionView", "animoView", "libroView", "exportView"];
+  views.forEach(id => document.getElementById(id).classList.add("hidden"));
+}
+
+function compartir() {
+  if (navigator.share) {
+    navigator.share({ text: frase + "\n— Estoico Diario" });
+  } else {
+    navigator.clipboard.writeText(frase);
+    alert("Frase copiada al portapapeles");
+  }
+}
+
+// MODO OSCURO
+function toggleDark() {
+  document.body.classList.toggle("dark");
+  localStorage.setItem("darkMode", document.body.classList.contains("dark"));
+}
+
+if (localStorage.getItem("darkMode") === "true") {
+  document.body.classList.add("dark");
+}
+
+// INICIO
+mostrarPrincipal();
+</script>
+
+</body>
+</html>
