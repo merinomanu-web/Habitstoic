@@ -14,12 +14,14 @@
   --bg: #ffffff;
   --text: #000000;
   --card: rgba(255,255,255,0.85);
+  --accent: #007aff;
 }
 
 body.dark {
   --bg: #000000;
   --text: #ffffff;
   --card: rgba(30,30,30,0.9);
+  --accent: #0a84ff;
 }
 
 body {
@@ -56,7 +58,7 @@ main {
 }
 
 #frase {
-  font-size: 28px;          /* Mucho más grande */
+  font-size: 28px;
   font-weight: bold;
   line-height: 1.4;
   text-align: center;
@@ -99,7 +101,21 @@ nav {
 }
 
 nav button {
-  font-size: 14px; /* Reducido un poco para caber más botones */
+  font-size: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: var(--text);
+}
+
+nav button span {
+  font-size: 12px;
+}
+
+/* Solo "Hoy" tiene texto visible */
+nav button:nth-child(1) span {
+  font-weight: bold;
 }
 
 .modal {
@@ -121,7 +137,7 @@ nav button {
   text-align: center;
 }
 
-/* Timer styles */
+/* Timer */
 #timerDisplay {
   font-size: 60px;
   font-weight: bold;
@@ -146,19 +162,37 @@ nav button {
 #timerPresets {
   display: flex;
   justify-content: center;
-  gap: 10px;
+  gap: 12px;
   flex-wrap: wrap;
+  margin-top: 20px;
 }
 
 #timerPresets button {
-  font-size: 14px;
-  padding: 8px 16px;
+  font-size: 16px;
+  padding: 10px 20px;
+  background: rgba(0,0,0,0.05);
+  border-radius: 12px;
+  min-width: 80px;
 }
 
-/* Libro styles */
+#timerPresets button.active {
+  background: var(--accent);
+  color: white;
+}
+
+/* Libro */
 #libroDescripcion {
   font-style: italic;
   margin: 20px 0;
+  line-height: 1.5;
+}
+
+#libroLink {
+  display: inline-block;
+  margin-top: 15px;
+  color: var(--accent);
+  font-weight: bold;
+  text-decoration: none;
 }
 </style>
 </head>
@@ -168,12 +202,12 @@ nav button {
 <!-- LANDING -->
 <div id="landing" class="modal">
   <div class="modal-content">
-    <h2>Estoico Diario v1.3</h2>
+    <h2>Estoico Diario v1.4</h2>
     <p>
-      Frases estoicas aleatorias diarias.<br><br>
-      Registro de café, timer de meditación y recomendaciones de libros.<br><br>
-      Equilibrio, disciplina y presencia.<br><br>
-      Desarrollada por <b>Kingmerino</b>
+      Frases estoicas diarias.<br><br>
+      Café, meditación y libros recomendados.<br><br>
+      Disciplina, calma y sabiduría.<br><br>
+      Por <b>Kingmerino</b>
     </p>
     <button onclick="cerrarLanding()">Entrar</button>
   </div>
@@ -227,39 +261,39 @@ nav button {
   <div id="timerDisplay">10:00</div>
   
   <div class="timer-controls">
-    <button onclick="toggleTimer()">▶️ Iniciar</button>
+    <button id="playPauseBtn">▶️ Iniciar</button>
     <button onclick="reiniciarTimer()">🔄 Reiniciar</button>
   </div>
 
   <div id="timerPresets">
-    <button onclick="setTimer(300)">5 min</button>
-    <button onclick="setTimer(600)">10 min</button>
-    <button onclick="setTimer(900)">15 min</button>
-    <button onclick="setTimer(1200)">20 min</button>
+    <button onclick="setTimer(300)" class="preset-btn">5 min</button>
+    <button onclick="setTimer(600)" class="preset-btn active">10 min</button>
+    <button onclick="setTimer(900)" class="preset-btn">15 min</button>
+    <button onclick="setTimer(1200)" class="preset-btn">20 min</button>
   </div>
 </section>
 
 <!-- LIBRO -->
 <section id="libroView" class="card hidden">
-  <h3>Recomendación de Libro Estoico</h3>
+  <h3>Libro Recomendado</h3>
   <h4 id="libroTitulo"></h4>
   <p id="libroAutor"></p>
   <p id="libroDescripcion"></p>
-  <a id="libroLink" href="" target="_blank">Más información en Amazon</a>
+  <a id="libroLink" href="" target="_blank">Buscar en Google ↗</a>
 </section>
 
 </main>
 
 <nav>
-  <button onclick="mostrarHoy()">Hoy</button>
-  <button onclick="mostrarFavoritos()">Favoritos</button>
-  <button onclick="mostrarCafe()">Café</button>
-  <button onclick="mostrarMeditacion()">🧘 Meditar</button>
-  <button onclick="mostrarLibro()">📖 Libro</button>
+  <button onclick="mostrarHoy()"><span>Hoy</span>🏠</button>
+  <button onclick="mostrarFavoritos()">❤️</button>
+  <button onclick="mostrarCafe()">☕</button>
+  <button onclick="mostrarMeditacion()">🧘</button>
+  <button onclick="mostrarLibro()">📖</button>
 </nav>
 
 <script>
-// FRASES ESTOICAS ALEATORIAS POR DÍA
+// FRASES ESTOICAS
 const frases = {
   lunes: [
     "No tienes que controlar tus pensamientos. Solo tienes que dejar de dejar que te controlen a ti.",
@@ -401,7 +435,7 @@ function cargarHistorial() {
 
 // TIMER DE MEDITACIÓN
 let timerInterval = null;
-let tiempoRestante = 600; // 10 minutos por defecto
+let tiempoRestante = 600;
 
 function actualizarDisplay() {
   const minutos = Math.floor(tiempoRestante / 60);
@@ -411,11 +445,13 @@ function actualizarDisplay() {
 }
 
 function toggleTimer() {
+  const btn = document.getElementById("playPauseBtn");
   if (timerInterval) {
     clearInterval(timerInterval);
     timerInterval = null;
-    document.querySelector("#meditacionView button:nth-child(1)").innerText = "▶️ Iniciar";
+    btn.innerText = "▶️ Iniciar";
   } else {
+    if (tiempoRestante <= 0) tiempoRestante = 600;
     timerInterval = setInterval(() => {
       tiempoRestante--;
       actualizarDisplay();
@@ -423,30 +459,33 @@ function toggleTimer() {
         clearInterval(timerInterval);
         timerInterval = null;
         document.getElementById("timerDisplay").innerText = "¡Fin!";
-        // Sonido suave
         const audio = new Audio("data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAAA");
         audio.play();
         setTimeout(() => {
-          if (confirm("¡Meditación completada! ¿Quieres volver a Hoy?")) mostrarHoy();
+          if (confirm("¡Meditación completada! ¿Volver a Hoy?")) mostrarHoy();
         }, 1000);
+        btn.innerText = "▶️ Iniciar";
       }
     }, 1000);
-    document.querySelector("#meditacionView button:nth-child(1)").innerText = "⏸ Pausar";
+    btn.innerText = "⏸ Pausar";
   }
 }
 
 function reiniciarTimer() {
   clearInterval(timerInterval);
   timerInterval = null;
-  tiempoRestante = 600;
+  document.getElementById("playPauseBtn").innerText = "▶️ Iniciar";
   actualizarDisplay();
-  document.querySelector("#meditacionView button:nth-child(1)").innerText = "▶️ Iniciar";
 }
 
 function setTimer(segundos) {
   tiempoRestante = segundos;
   actualizarDisplay();
   reiniciarTimer();
+
+  // Resaltar botón activo
+  document.querySelectorAll("#timerPresets button").forEach(b => b.classList.remove("active"));
+  event.target.classList.add("active");
 }
 
 function mostrarMeditacion() {
@@ -455,69 +494,38 @@ function mostrarMeditacion() {
   actualizarDisplay();
 }
 
-// LIBROS ESTOICOS
+// LIBROS
 const libros = [
-  {
-    titulo: "Meditaciones",
-    autor: "Marco Aurelio",
-    descripcion: "Reflexiones personales del emperador romano sobre la vida, la muerte y la virtud estoica. Un clásico para cultivar la resiliencia interior."
-  },
-  {
-    titulo: "Cartas a Lucilio",
-    autor: "Séneca",
-    descripcion: "Una serie de cartas filosóficas que abordan temas como la amistad, el miedo y la búsqueda de la sabiduría. Ideal para lecturas diarias."
-  },
-  {
-    titulo: "Enquiridión",
-    autor: "Epicteto",
-    descripcion: "Manual práctico de estoicismo que enseña a distinguir entre lo que podemos controlar y lo que no. Conciso y transformador."
-  },
-  {
-    titulo: "Sobre la brevedad de la vida",
-    autor: "Séneca",
-    descripcion: "Ensayo que nos invita a valorar el tiempo y vivir plenamente, evitando distracciones innecesarias."
-  },
-  {
-    titulo: "Discursos",
-    autor: "Epicteto",
-    descripcion: "Lecciones de un esclavo liberado convertido en filósofo, enfocadas en la libertad mental y la ética personal."
-  },
-  {
-    titulo: "El arte de vivir",
-    autor: "Epicteto",
-    descripcion: "Guía para aplicar el estoicismo en la vida cotidiana, enfatizando la autodisciplina y la aceptación."
-  },
-  {
-    titulo: "De la ira",
-    autor: "Séneca",
-    descripcion: "Tratado sobre cómo controlar la ira y mantener la calma en situaciones provocadoras."
-  }
+  { titulo: "Meditaciones", autor: "Marco Aurelio", descripcion: "Reflexiones personales del emperador romano sobre la vida, la muerte y la virtud estoica. Un clásico imprescindible." },
+  { titulo: "Cartas a Lucilio", autor: "Séneca", descripcion: "Cartas filosóficas que tratan la amistad, el miedo a la muerte y la búsqueda de la sabiduría. Perfectas para lectura diaria." },
+  { titulo: "Enquiridión", autor: "Epicteto", descripcion: "Manual práctico del estoicismo: cómo distinguir lo que depende de nosotros y lo que no." },
+  { titulo: "Sobre la brevedad de la vida", autor: "Séneca", descripcion: "Ensayo que nos recuerda lo valioso que es el tiempo y cómo evitar desperdiciarlo." },
+  { titulo: "Discursos", autor: "Epicteto", descripcion: "Lecciones profundas de un esclavo convertido en filósofo sobre libertad interior y ética." },
+  { titulo: "De la ira", autor: "Séneca", descripcion: "Guía práctica para dominar la ira y mantener la serenidad ante las provocaciones." }
 ];
 
 function mostrarLibro() {
   ocultarTodo();
   document.getElementById("libroView").classList.remove("hidden");
-  const randomIndex = Math.floor(Math.random() * libros.length);
-  const libro = libros[randomIndex];
+  
+  const libro = libros[Math.floor(Math.random() * libros.length)];
   document.getElementById("libroTitulo").innerText = libro.titulo;
   document.getElementById("libroAutor").innerText = `Autor: ${libro.autor}`;
   document.getElementById("libroDescripcion").innerText = libro.descripcion;
-  const searchQuery = encodeURIComponent(`${libro.titulo} ${libro.autor}`);
-  document.getElementById("libroLink").href = `https://www.amazon.com/s?k=${searchQuery}`;
+  
+  const query = encodeURIComponent(`${libro.titulo} ${libro.autor} libro`);
+  document.getElementById("libroLink").href = `https://www.google.com/search?q=${query}`;
 }
 
-// UI GENERAL
+// UI
 function mostrarHoy() {
   ocultarTodo();
   document.getElementById("hoyView").classList.remove("hidden");
 }
 
 function ocultarTodo() {
-  document.getElementById("hoyView").classList.add("hidden");
-  document.getElementById("favoritosView").classList.add("hidden");
-  document.getElementById("cafeView").classList.add("hidden");
-  document.getElementById("meditacionView").classList.add("hidden");
-  document.getElementById("libroView").classList.add("hidden");
+  const views = ["hoyView", "favoritosView", "cafeView", "meditacionView", "libroView"];
+  views.forEach(id => document.getElementById(id).classList.add("hidden"));
 }
 
 function compartir() {
@@ -537,7 +545,7 @@ function toggleDark() {
   document.body.classList.toggle("dark");
 }
 
-// Iniciar en "Hoy"
+// Iniciar
 mostrarHoy();
 </script>
 
